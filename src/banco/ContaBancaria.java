@@ -9,17 +9,18 @@ package banco;
  *
  * @author facom
  */
-public class ContaBancaria {
+public class ContaBancaria implements tributavel {
 
     public int numero;
-    private int senha;
+    protected int senha;
     protected double saldo;
-    public String nometitular;
+    protected Cliente cliente;
 
-    public ContaBancaria(int numero, int senha, String nome) {
+    public ContaBancaria(int numero, int senha, Cliente cliente) {
         this.numero = numero;
         this.senha = senha;
-        nometitular = nome;
+        this.cliente = cliente;
+
     }
 
     public boolean sacar(double valor, int senha) {
@@ -32,14 +33,18 @@ public class ContaBancaria {
         }
         return false;
     }
-    
-    public void depositar(double valor)
-    {
-     saldo += valor;    
+
+    public void depositar(double valor) {
+        saldo += valor;
+        System.out.println("Foi depositado " + valor);
     }
-    public String ImprimirSaldo()
-    {
-    return String.format("Seu saldo é de: %.2f",saldo);
+
+    public String ImprimirSaldo() {
+        return String.format("Seu saldo é de: %.2f", saldo);
+    }
+    
+     public static String ImprimirSaldo(ContaBancaria conta) {
+        return String.format("Seu saldo é de: %.2f", conta.saldo);
     }
 
     public int getSenha() {
@@ -50,12 +55,21 @@ public class ContaBancaria {
         this.senha = senha;
     }
 
-    public boolean verificarsenha(int senha)
-    {
-    if(this.senha == senha)
-        return true;
-    
-    return false;
+    public boolean verificarsenha(int senha) {
+        if (this.senha == senha) {
+            return true;
+        }
+
+        return false;
     }
-    
+
+    public String toString() {
+        return String.format("Nome titular: %s" + "\nSeu saldo é de: %.2f" + "\nNumero da conta: %d",cliente.nometitular, saldo, numero);
+
+    }
+
+    public float getImposto() {
+        return (float) (saldo * 0.01);
+    }
+
 }
